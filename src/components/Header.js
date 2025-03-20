@@ -2,15 +2,26 @@ import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import "../styles/components/header.css";
+import { createContext, useContext } from "react";
+import { GenreContext } from "../context/GenreContext";
+
+const genres = [
+  "Romance",
+  "Detective / Mystery",
+  "Horror",
+  "Action",
+  "Comedy",
+  "Science Fiction (Sci-Fi)",
+];
 
 const Header = () => {
+  const { setSelectedGenre } = useContext(GenreContext);
+
   const user = {
     name: "hau",
     role: "admin",
   };
   //   const user = null;
-
-  const handleLogout = () => console.log("abc");
 
   return (
     <>
@@ -32,30 +43,14 @@ const Header = () => {
                 id="genre-dropdown"
                 className="nav-dropdown-custom"
               >
-                <NavDropdown.Item as={Link} to="/stories?genre=Action">
-                  Action
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  as={Link}
-                  to="/stories?genre=Detective / Mystery"
-                >
-                  Detective / Mystery
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/stories?genre=Romance">
-                  Romance
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/stories?genre=Horror">
-                  Horror
-                </NavDropdown.Item>
-                <NavDropdown.Item as={Link} to="/stories?genre=Comedy">
-                  Comedy
-                </NavDropdown.Item>
-                <NavDropdown.Item
-                  as={Link}
-                  to="/stories?genre=Science Fiction (Sci-Fi)"
-                >
-                  Science Fiction (Sci-Fi)
-                </NavDropdown.Item>
+                {genres.map((genre, index) => (
+                  <NavDropdown.Item
+                    key={index}
+                    onClick={() => setSelectedGenre(genre)}
+                  >
+                    {genre}
+                  </NavDropdown.Item>
+                ))}
               </NavDropdown>
             </Nav>
 

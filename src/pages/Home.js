@@ -3,7 +3,10 @@ import data from "../data/stories.json";
 import { Link } from "react-router-dom";
 import "../styles/pages/home.css";
 const Home = () => {
-  const featuredStories = data.stories.filter((story) => story.viewCount > 100);
+  const featuredStories = data.stories
+    .sort((a, b) => b.viewCount - a.viewCount)
+    .slice(0, 5)
+    .filter((story) => story.viewCount > 100);
 
   return (
     <>
@@ -44,44 +47,54 @@ const Home = () => {
             </Carousel>
           </Col>
         </Row>
+        <Row className="text-end view-more">
+          <Col>
+            <Button as={Link} to={`/stories`} className="mt-2 read-now-btn">
+              View More
+            </Button>
+          </Col>
+        </Row>
 
         <Row className="justify-content-center m-lg-3">
-          {data.stories.map((story) => (
-            <Col md={2} key={story.id} className="m-2 mb-3">
-              <Card
-                key={story.id}
-                className="card shadow"
-                style={{ width: "200px" }}
-              >
-                <Card.Img
-                  src={story.coverImage}
-                  variant="top"
-                  alt={story.title}
-                  className="p-1 rounded-top-3"
-                  style={{
-                    height: "300px",
-                    objectFit: "cover",
-                  }}
-                />
-                <Card.Body className="card-body p-3 text-start">
-                  <Card.Title className="text-danger mb-3 opacity-75 title-text">
-                    {<strong>{story.title}</strong>}
-                  </Card.Title>
-                  <Card.Text>View: {story.viewCount}</Card.Text>
-                  <Card.Text className="title-text">
-                    Author: {story.author}
-                  </Card.Text>
-                  <Button
-                    as={Link}
-                    to={`/stories/${story.id}`}
-                    className="mt-2 read-now-btn"
-                  >
-                    Read Now
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
+          {data.stories
+            .sort((a, b) => b.id - a.id)
+            .slice(0, 5)
+            .map((story) => (
+              <Col md={2} key={story.id} className="m-2 mb-3">
+                <Card
+                  key={story.id}
+                  className="card shadow"
+                  style={{ width: "200px" }}
+                >
+                  <Card.Img
+                    src={story.coverImage}
+                    variant="top"
+                    alt={story.title}
+                    className="p-1 rounded-top-3"
+                    style={{
+                      height: "300px",
+                      objectFit: "cover",
+                    }}
+                  />
+                  <Card.Body className="card-body p-3 text-start">
+                    <Card.Title className="text-danger mb-3 opacity-75 title-text">
+                      {<strong>{story.title}</strong>}
+                    </Card.Title>
+                    <Card.Text>View: {story.viewCount}</Card.Text>
+                    <Card.Text className="title-text">
+                      Author: {story.author}
+                    </Card.Text>
+                    <Button
+                      as={Link}
+                      to={`/stories/${story.id}`}
+                      className="mt-2 read-now-btn"
+                    >
+                      Read Now
+                    </Button>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))}
         </Row>
       </Container>
     </>
