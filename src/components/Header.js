@@ -2,7 +2,7 @@ import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";
 import "../styles/components/header.css";
-import { createContext, useContext } from "react";
+import { useContext } from "react";
 import { GenreContext } from "../context/GenreContext";
 
 const genres = [
@@ -19,13 +19,13 @@ const Header = () => {
 
   const user = {
     name: "hau",
-    role: "admin",
+    role: "user",
   };
   //   const user = null;
 
   return (
     <>
-      <Navbar expand="lg" className="custom-navbar mb-5">
+      <Navbar expand="lg" className="custom-navbar mb-3">
         <Container>
           <Navbar.Brand as={Link} to="/" className="logo">
             <h3>ReadVerse</h3>

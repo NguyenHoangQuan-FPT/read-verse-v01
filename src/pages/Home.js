@@ -38,7 +38,7 @@ const Home = () => {
                         to={`/stories/${story.id}`}
                         className="mt-2 read-now-btn"
                       >
-                        Read Now
+                        Details
                       </Button>
                     </Col>
                   </Row>
@@ -49,7 +49,7 @@ const Home = () => {
         </Row>
         <Row className="text-end view-more">
           <Col>
-            <Button as={Link} to={`/stories`} className="mt-2 read-now-btn">
+            <Button as={Link} to={"/stories"} className="mt-2 read-now-btn">
               View More
             </Button>
           </Col>

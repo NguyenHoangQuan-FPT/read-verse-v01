@@ -6,6 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./pages/Home";
 import StoryList from "./pages/story/StoryList";
 import { GenreProvider } from "./context/GenreContext";
+import StoryDetail from "./pages/story/StoryDetail";
+import StoryReader from "./pages/story/StoryReader";
 
 function App() {
   return (
@@ -18,6 +20,8 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/stories" element={<StoryList />} />
+            <Route path="/stories/:id" element={<StoryDetail />} />
+            <Route path="/stories/read/:id" element={<StoryReader />} />
           </Routes>
         </main>
         <footer>
