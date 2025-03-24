@@ -46,7 +46,7 @@ const StoryReader = () => {
       <Container className="my-5">
         <Alert variant="danger" className="text-center">
           <h4>Loading Data Failed</h4>
-          <p>Không thể tải dữ liệu truyện. Vui lòng thử lại sau.</p>
+          <p>Please try again or read other !</p>
         </Alert>
       </Container>
     );
@@ -58,7 +58,7 @@ const StoryReader = () => {
       <Container className="my-5">
         <Alert variant="warning" className="text-center">
           <h4>Story Not Found</h4>
-          <p>Không tìm thấy truyện với ID này. Vui lòng kiểm tra lại.</p>
+          <p>No match story with ID. Please check ID !</p>
         </Alert>
       </Container>
     );
@@ -70,7 +70,7 @@ const StoryReader = () => {
       <Container className="my-5">
         <Alert variant="warning" className="text-center">
           <h4>No PDF Available</h4>
-          <p>Truyện này hiện không có file PDF. Vui lòng chọn truyện khác.</p>
+          <p>Failed Load PDF file or not available. Please read other !</p>
         </Alert>
       </Container>
     );
@@ -143,7 +143,7 @@ const StoryReader = () => {
               variant="outline-primary"
               onClick={goToPreviousPage}
               disabled={pageNumber <= 1}
-              className="me-2 read-now-btn"
+              className="me-2 read-now-btn text-white"
             >
               Previous
             </Button>
@@ -154,7 +154,7 @@ const StoryReader = () => {
               variant="outline-primary"
               onClick={goToNextPage}
               disabled={pageNumber >= numPages}
-              className="ms-2 read-now-btn"
+              className="ms-2 read-now-btn text-white"
             >
               Next
             </Button>

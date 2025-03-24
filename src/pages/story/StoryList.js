@@ -40,7 +40,7 @@ const removeDiacritics = (str) => {
 };
 
 const StoryList = () => {
-  const { selectedGenre, setSelectedGenre } = useContext(GenreContext || "All"); // Lấy genre và setGenre từ Context
+  const { selectedGenre, setSelectedGenre } = useContext(GenreContext); // Lấy genre và setGenre từ Context
   const [search, setSearch] = useState("");
 
   const filteredStories = data.stories

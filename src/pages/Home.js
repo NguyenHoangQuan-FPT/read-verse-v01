@@ -89,7 +89,7 @@ const Home = () => {
                       to={`/stories/${story.id}`}
                       className="mt-2 read-now-btn"
                     >
-                      Read Now
+                      Details
                     </Button>
                   </Card.Body>
                 </Card>

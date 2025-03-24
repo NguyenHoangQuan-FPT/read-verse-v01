@@ -8,25 +8,34 @@ import StoryList from "./pages/story/StoryList";
 import { GenreProvider } from "./context/GenreContext";
 import StoryDetail from "./pages/story/StoryDetail";
 import StoryReader from "./pages/story/StoryReader";
+import Login from "./pages/auth/Login";
+import { AuthProvider } from "./context/AuthContext";
+import Signup from "./pages/auth/Signup";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
     <div className="App">
       <GenreProvider>
-        <header>
-          <Header />
-        </header>
-        <main>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/stories" element={<StoryList />} />
-            <Route path="/stories/:id" element={<StoryDetail />} />
-            <Route path="/stories/read/:id" element={<StoryReader />} />
-          </Routes>
-        </main>
-        <footer>
-          <Footer />
-        </footer>
+        <AuthProvider>
+          <header>
+            <Header />
+          </header>
+          <main>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/stories" element={<StoryList />} />
+              <Route path="/stories/:id" element={<StoryDetail />} />
+              <Route path="/stories/read/:id" element={<StoryReader />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/profile" element={<Profile />} />
+            </Routes>
+          </main>
+          <footer>
+            <Footer />
+          </footer>
+        </AuthProvider>
       </GenreProvider>
     </div>
   );

@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 const GenreContext = createContext();
 
 const GenreProvider = ({ children }) => {
-  const [selectedGenre, setSelectedGenre] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("All");
 
   const value = {
     selectedGenre,
