@@ -12,8 +12,15 @@ import Login from "./pages/auth/Login";
 import { AuthProvider } from "./context/AuthContext";
 import Signup from "./pages/auth/Signup";
 import Profile from "./pages/Profile";
+import Dashboard from "./pages/admin/Dashboard";
+import { useEffect } from "react";
+import { initializeStories } from "./utils/storyService";
 
 function App() {
+  useEffect(() => {
+    initializeStories();
+  }, []);
+
   return (
     <div className="App">
       <GenreProvider>
@@ -30,6 +37,8 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />
+
+              <Route path="/dashboard" element={<Dashboard />} />
             </Routes>
           </main>
           <footer>

@@ -10,11 +10,10 @@ import {
   Card,
 } from "react-bootstrap";
 import "../../styles/pages/storylist.css";
-import data from "../../data/stories.json";
 import { Link } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { GenreContext } from "../../context/GenreContext"; // Import GenreContext
-
+import { getStories } from "../../utils/storyService.js";
 const genres = [
   "All",
   "Romance",
@@ -40,10 +39,17 @@ const removeDiacritics = (str) => {
 };
 
 const StoryList = () => {
+  const [stories, setStories] = useState([]);
+
+  useEffect(() => {
+    const storiesFromLocal = getStories();
+    setStories(storiesFromLocal);
+  }, []);
+
   const { selectedGenre, setSelectedGenre } = useContext(GenreContext); // Lấy genre và setGenre từ Context
   const [search, setSearch] = useState("");
 
-  const filteredStories = data.stories
+  const filteredStories = stories
     .filter((story) => {
       if (selectedGenre === "All") return true;
       return story.genre === selectedGenre;

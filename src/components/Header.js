@@ -76,7 +76,7 @@ const Header = () => {
               >
                 {user.role === "admin" ? (
                   <>
-                    <NavDropdown.Item as={Link} to="/admin/dashboard">
+                    <NavDropdown.Item as={Link} to="/dashboard">
                       Dashboard
                     </NavDropdown.Item>
                     <NavDropdown.Item onClick={handleLogout}>

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";
-import storiesData from "../../data/stories.json";
+import { getStories } from "../../utils/storyService.js";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import {
@@ -25,10 +25,14 @@ const StoryReader = () => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
   const [story, setStory] = useState(null);
+  const [stories, setStories] = useState([]);
 
-  // Tải thông tin story dựa trên id
+  // Lấy danh sách sách từ localStorage
   useEffect(() => {
-    const foundStory = storiesData.stories.find(
+    const storiesFromLocal = getStories();
+    setStories(storiesFromLocal);
+
+    const foundStory = storiesFromLocal.find(
       (story) => story.id.toString() === id
     );
     if (foundStory) {
@@ -37,16 +41,12 @@ const StoryReader = () => {
   }, [id]);
 
   // Kiểm tra dữ liệu stories
-  if (
-    !storiesData ||
-    !storiesData.stories ||
-    storiesData.stories.length === 0
-  ) {
+  if (!stories || stories.length === 0) {
     return (
       <Container className="my-5">
         <Alert variant="danger" className="text-center">
           <h4>Loading Data Failed</h4>
-          <p>Please try again or read other !</p>
+          <p>Please try again or read other!</p>
         </Alert>
       </Container>
     );
@@ -58,7 +58,7 @@ const StoryReader = () => {
       <Container className="my-5">
         <Alert variant="warning" className="text-center">
           <h4>Story Not Found</h4>
-          <p>No match story with ID. Please check ID !</p>
+          <p>No match story with ID. Please check ID!</p>
         </Alert>
       </Container>
     );
@@ -70,7 +70,7 @@ const StoryReader = () => {
       <Container className="my-5">
         <Alert variant="warning" className="text-center">
           <h4>No PDF Available</h4>
-          <p>Failed Load PDF file or not available. Please read other !</p>
+          <p>Failed to load PDF file or not available. Please read other!</p>
         </Alert>
       </Container>
     );

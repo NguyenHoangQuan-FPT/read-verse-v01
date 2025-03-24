@@ -1,9 +1,18 @@
 import { Button, Card, Carousel, Col, Container, Row } from "react-bootstrap";
-import data from "../data/stories.json";
 import { Link } from "react-router-dom";
 import "../styles/pages/home.css";
+import { getStories } from "../utils/storyService.js"; // Import từ storyService
+import { useEffect, useState } from "react";
+
 const Home = () => {
-  const featuredStories = data.stories
+  const [stories, setStories] = useState([]);
+
+  useEffect(() => {
+    const storiesFromLocal = getStories();
+    setStories(storiesFromLocal);
+  }, []);
+
+  const featuredStories = stories
     .sort((a, b) => b.viewCount - a.viewCount)
     .slice(0, 5)
     .filter((story) => story.viewCount > 100);
@@ -56,7 +65,7 @@ const Home = () => {
         </Row>
 
         <Row className="justify-content-center m-lg-3">
-          {data.stories
+          {stories
             .sort((a, b) => b.id - a.id)
             .slice(0, 5)
             .map((story) => (

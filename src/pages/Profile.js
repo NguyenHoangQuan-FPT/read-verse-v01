@@ -87,7 +87,9 @@ const Profile = () => {
                         return (
                           <ListGroup.Item
                             key={storyId}
-                            className="d-flex justify-content-between align-items-center border border-danger rounded-2 border-opacity-50 shadow-sm mb-2"
+                            className="d-flex justify-content-between 
+                            align-items-center border border-danger 
+                            rounded-2 border-opacity-50 shadow-sm mb-2"
                           >
                             <div>
                               <Link

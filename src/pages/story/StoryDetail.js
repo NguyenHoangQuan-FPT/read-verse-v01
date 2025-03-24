@@ -3,107 +3,92 @@ import { useState, useEffect, useContext } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
-import storyList from "../../data/stories.json";
+import { AuthContext } from "../../context/AuthContext";
+import { getStories, updateStories } from "../../utils/storyService.js";
 import commentList from "../../data/comments.json";
 import Comments from "../../components/features/Comments.js";
-import { AuthContext } from "../../context/AuthContext";
 
 const StoryDetail = () => {
   const { id } = useParams();
-  const { user } = useContext(AuthContext); // Lấy thông tin tài khoản từ AuthContext
-  const story = storyList.stories.find((story) => story.id.toString() === id);
+  const { user } = useContext(AuthContext);
 
-  // Lấy viewCount và commentCount từ localStorage
-  const storedCounts = localStorage.getItem("storyCounts");
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const storyCounts = storedCounts ? JSON.parse(storedCounts) : {};
-
-  // Khởi tạo viewCount và commentCount cho truyện hiện tại
-  const [viewCount, setViewCount] = useState(
-    storyCounts[id]?.viewCount || story.viewCount || 0
-  );
-  const [commentCount, setCommentCount] = useState(
-    storyCounts[id]?.commentCount || story.commentCount || 0
-  );
-
-  // Khởi tạo trạng thái nút yêu thích
+  const [stories, setStories] = useState([]);
+  const [viewCount, setViewCount] = useState(0);
+  const [commentCount, setCommentCount] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
+
+  // Lấy danh sách sách từ localStorage
+  useEffect(() => {
+    const storiesFromLocal = getStories();
+    setStories(storiesFromLocal);
+
+    const story = storiesFromLocal.find((s) => s.id.toString() === id);
+    if (story) {
+      setViewCount(story.viewCount || 0);
+      setCommentCount(story.commentCount || 0);
+    }
+  }, [id]);
 
   // Tăng viewCount khi trang được tải
   useEffect(() => {
-    const updatedViewCount = viewCount + 1;
-    setViewCount(updatedViewCount);
+    const story = stories.find((s) => s.id.toString() === id);
+    if (story) {
+      const updatedViewCount = (story.viewCount || 0) + 1;
+      setViewCount(updatedViewCount);
 
-    // Cập nhật storyCounts trong localStorage
-    const updatedStoryCounts = {
-      ...storyCounts,
-      [id]: {
-        viewCount: updatedViewCount,
-        commentCount: commentCount,
-      },
-    };
-    localStorage.setItem("storyCounts", JSON.stringify(updatedStoryCounts));
+      const updatedStories = stories.map((s) =>
+        s.id.toString() === id ? { ...s, viewCount: updatedViewCount } : s
+      );
+      setStories(updatedStories);
+      updateStories(updatedStories);
+    }
   }, [id]);
 
-  // Kiểm tra trạng thái yêu thích khi trang được tải
+  // Kiểm tra trạng thái yêu thích
   useEffect(() => {
     if (user) {
       const storedFavorites = localStorage.getItem("favorites");
       const favorites = storedFavorites ? JSON.parse(storedFavorites) : {};
-
-      // Kiểm tra xem truyện hiện tại có trong danh sách yêu thích của user không
       const userFavorites = favorites[user.username] || [];
       setIsFavorite(userFavorites.includes(parseInt(id)));
     }
   }, [id, user]);
 
-  // Xử lý khi nhấn nút yêu thích
   const handleFavoriteClick = () => {
     if (!user) {
-      alert("PLease Login to add favorite story !");
+      alert("Vui lòng đăng nhập để thêm truyện vào yêu thích!");
       return;
     }
 
     const storedFavorites = localStorage.getItem("favorites");
     const favorites = storedFavorites ? JSON.parse(storedFavorites) : {};
-
-    // Lấy danh sách yêu thích của user hiện tại
     const userFavorites = favorites[user.username] || [];
 
     if (isFavorite) {
-      // Xóa truyện khỏi danh sách yêu thích
       const updatedUserFavorites = userFavorites.filter(
         (storyId) => storyId !== parseInt(id)
       );
       favorites[user.username] = updatedUserFavorites;
       setIsFavorite(false);
     } else {
-      // Thêm truyện vào danh sách yêu thích
       favorites[user.username] = [...userFavorites, parseInt(id)];
       setIsFavorite(true);
     }
 
-    // Lưu lại danh sách yêu thích vào localStorage
     localStorage.setItem("favorites", JSON.stringify(favorites));
   };
 
-  // Lấy danh sách bình luận từ localStorage (nếu có)
   const storedComments = localStorage.getItem("comments");
   const localComments = storedComments ? JSON.parse(storedComments) : [];
-
-  // Kết hợp danh sách bình luận từ comments.json và localStorage
   const combinedComments = [...commentList.comments, ...localComments];
-
-  // Loại bỏ trùng lặp dựa trên id
   const uniqueComments = Array.from(
     new Map(combinedComments.map((comment) => [comment.id, comment])).values()
   );
-
-  // Lọc bình luận theo storyId và sắp xếp theo ngày (mới nhất trước)
   const comments = uniqueComments
     .filter((comment) => comment.storyId && comment.storyId.toString() === id)
     .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const story = stories.find((story) => story.id.toString() === id);
 
   if (!story) {
     return <div>Story not found!</div>;
@@ -164,13 +149,10 @@ const StoryDetail = () => {
                 style={{
                   border: "none",
                   background: "transparent",
+                  padding: "5px",
                 }}
               >
-                <FaHeart
-                  variant="outline-danger"
-                  size={30}
-                  color={isFavorite ? "#ff4d4d" : "#acacac"}
-                />
+                <FaHeart size={24} color={isFavorite ? "red" : "gray"} />
               </Button>
             </div>
           </Card.Body>
