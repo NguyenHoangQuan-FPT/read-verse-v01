@@ -55,6 +55,8 @@ const Header = () => {
                 <NavDropdown.Item
                   key={index}
                   onClick={() => setSelectedGenre(genre)}
+                  as={Link}
+                  to="/stories"
                 >
                   {genre}
                 </NavDropdown.Item>

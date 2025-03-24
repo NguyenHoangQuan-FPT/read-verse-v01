@@ -1,7 +1,7 @@
 // src/pages/story/StoryDetail.js
 import { useState, useEffect, useContext } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
 import { getStories, updateStories } from "../../utils/storyService.js";
@@ -11,37 +11,65 @@ import Comments from "../../components/features/Comments.js";
 const StoryDetail = () => {
   const { id } = useParams();
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const [stories, setStories] = useState([]);
-  const [viewCount, setViewCount] = useState(0);
-  const [commentCount, setCommentCount] = useState(0);
+  const [story, setStory] = useState(null);
+  const [viewCount, setViewCount] = useState(0); // Giá trị ban đầu sẽ được set từ localStorage
+  const [commentCount, setCommentCount] = useState(0); // Giá trị ban đầu sẽ được set từ localStorage
   const [isFavorite, setIsFavorite] = useState(false);
 
-  // Lấy danh sách sách từ localStorage
-  useEffect(() => {
+  // Lấy danh sách truyện và bình luận từ localStorage
+  const fetchData = () => {
     const storiesFromLocal = getStories();
     setStories(storiesFromLocal);
 
-    const story = storiesFromLocal.find((s) => s.id.toString() === id);
-    if (story) {
-      setViewCount(story.viewCount || 0);
-      setCommentCount(story.commentCount || 0);
+    const foundStory = storiesFromLocal.find((s) => s.id.toString() === id);
+    if (foundStory) {
+      setStory(foundStory);
+      setViewCount(foundStory.viewCount || 0); // Set giá trị ban đầu cho viewCount
+      setCommentCount(foundStory.commentCount || 0); // Set giá trị ban đầu cho commentCount
+
+      // Tính tổng số bình luận (từ comments.json và localStorage)
+      const storedComments = localStorage.getItem("comments");
+      const localComments = storedComments ? JSON.parse(storedComments) : [];
+      const combinedComments = [...commentList.comments, ...localComments];
+      const uniqueComments = Array.from(
+        new Map(
+          combinedComments.map((comment) => [comment.id, comment])
+        ).values()
+      );
+      const storyComments = uniqueComments.filter(
+        (comment) => comment.storyId && comment.storyId.toString() === id
+      );
+      // Cập nhật commentCount trong localStorage nếu không khớp
+      if (foundStory.commentCount !== storyComments.length) {
+        const updatedStories = storiesFromLocal.map((s) =>
+          s.id.toString() === id
+            ? { ...s, commentCount: storyComments.length }
+            : s
+        );
+        setCommentCount(storyComments.length);
+        updateStories(updatedStories);
+      }
     }
+  };
+
+  // Lấy dữ liệu ban đầu
+  useEffect(() => {
+    fetchData();
   }, [id]);
 
-  // Tăng viewCount khi trang được tải
+  // Đồng bộ dữ liệu khi localStorage thay đổi
   useEffect(() => {
-    const story = stories.find((s) => s.id.toString() === id);
-    if (story) {
-      const updatedViewCount = (story.viewCount || 0) + 1;
-      setViewCount(updatedViewCount);
+    const handleStorageChange = () => {
+      fetchData();
+    };
 
-      const updatedStories = stories.map((s) =>
-        s.id.toString() === id ? { ...s, viewCount: updatedViewCount } : s
-      );
-      setStories(updatedStories);
-      updateStories(updatedStories);
-    }
+    window.addEventListener("storage", handleStorageChange);
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
   }, [id]);
 
   // Kiểm tra trạng thái yêu thích
@@ -56,7 +84,7 @@ const StoryDetail = () => {
 
   const handleFavoriteClick = () => {
     if (!user) {
-      alert("Vui lòng đăng nhập để thêm truyện vào yêu thích!");
+      alert("Please login to add this story to favorites!");
       return;
     }
 
@@ -78,6 +106,32 @@ const StoryDetail = () => {
     localStorage.setItem("favorites", JSON.stringify(favorites));
   };
 
+  // Tăng viewCount khi nhấn "Read Now" (chỉ khi user đã đăng nhập)
+  const handleReadNowClick = () => {
+    if (!user) {
+      alert("Please login to read this story!");
+      navigate("/login");
+      return;
+    }
+
+    const sessionKey = `viewed_${id}_${user.username}`; // Thêm username để mỗi user chỉ tăng view 1 lần
+    const hasViewed = sessionStorage.getItem(sessionKey);
+
+    if (!hasViewed) {
+      const updatedViewCount = (viewCount || 0) + 1;
+      const updatedStories = stories.map((s) =>
+        s.id.toString() === id ? { ...s, viewCount: updatedViewCount } : s
+      );
+      setStories(updatedStories);
+      updateStories(updatedStories);
+      setViewCount(updatedViewCount);
+      sessionStorage.setItem(sessionKey, "true");
+    }
+
+    navigate(`/stories/read/${id}`);
+  };
+
+  // Lấy danh sách bình luận từ comments.json trước, sau đó gộp với localStorage
   const storedComments = localStorage.getItem("comments");
   const localComments = storedComments ? JSON.parse(storedComments) : [];
   const combinedComments = [...commentList.comments, ...localComments];
@@ -88,10 +142,12 @@ const StoryDetail = () => {
     .filter((comment) => comment.storyId && comment.storyId.toString() === id)
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  const story = stories.find((story) => story.id.toString() === id);
-
   if (!story) {
-    return <div>Story not found!</div>;
+    return (
+      <Container className="my-5 text-center">
+        <h3 className="text-danger opacity-75">Story not found!</h3>
+      </Container>
+    );
   }
 
   return (
@@ -139,6 +195,7 @@ const StoryDetail = () => {
                 as={Link}
                 to={`/stories/read/${story.id}`}
                 className="mt-2 read-now-btn me-2"
+                onClick={handleReadNowClick}
               >
                 Read Now
               </Button>
