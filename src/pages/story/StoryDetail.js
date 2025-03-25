@@ -1,7 +1,7 @@
 // src/pages/story/StoryDetail.js
 import { useState, useEffect, useContext } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
 import { getStories, updateStories } from "../../utils/storyService.js";
@@ -163,7 +163,7 @@ const StoryDetail = () => {
         </Col>
         <Col md={4} className="mt-5 text-start">
           <Card.Body>
-            <Card.Title className="text-danger mb-3 opacity-75 title-text">
+            <Card.Title className="text-danger mb-3 opacity-75">
               <h1>{story.title}</h1>
             </Card.Title>
             <Card.Text>
@@ -192,8 +192,6 @@ const StoryDetail = () => {
             </Card.Text>
             <div className="d-flex align-items-center">
               <Button
-                as={Link}
-                to={`/stories/read/${story.id}`}
                 className="mt-2 read-now-btn me-2"
                 onClick={handleReadNowClick}
               >

@@ -80,7 +80,7 @@ const Profile = () => {
                     </p>
                   ) : (
                     <ListGroup variant="flush">
-                      {favorites.map((storyId, index) => {
+                      {favorites.map((storyId) => {
                         const story = getStoryById(storyId);
                         if (!story) return null;
 
