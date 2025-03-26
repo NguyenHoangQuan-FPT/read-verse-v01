@@ -1,4 +1,6 @@
-// src/pages/StoryReader.js
+/*
+ * Assignment create by Group 2
+ */
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Document, Page, pdfjs } from "react-pdf";

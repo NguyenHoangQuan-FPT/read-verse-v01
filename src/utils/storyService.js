@@ -1,4 +1,6 @@
-// src/services/storyService.js
+/*
+ * Assignment create by Group 2
+ */
 import storyList from "../data/stories.json";
 
 // Hàm đồng bộ dữ liệu từ stories.json vào localStorage

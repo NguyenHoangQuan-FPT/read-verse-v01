@@ -1,4 +1,6 @@
-// src/pages/StoryList.js
+/*
+ * Assignment create by Group 2
+ */
 import {
   Col,
   Container,

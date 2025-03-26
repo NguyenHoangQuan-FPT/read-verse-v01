@@ -1,3 +1,6 @@
+/*
+ * Assignment create by Group 2
+ */
 import { Col, Container, Nav, Navbar, Row } from "react-bootstrap";
 import { FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { Link } from "react-router-dom";

@@ -1,4 +1,6 @@
-// src/components/Header.js
+/*
+ * Assignment create by Group 2
+ */
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import { FaUserCircle } from "react-icons/fa";

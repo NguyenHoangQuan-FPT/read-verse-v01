@@ -1,7 +1,10 @@
+/*
+ * Assignment create by Group 2
+ */
 import { Button, Card, Carousel, Col, Container, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import "../styles/pages/home.css";
-import { getStories } from "../utils/storyService.js"; // Import từ storyService
+import { getStories } from "../utils/storyService.js";
 import { useEffect, useState } from "react";
 
 const Home = () => {

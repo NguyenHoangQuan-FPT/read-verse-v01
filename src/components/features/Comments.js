@@ -1,4 +1,6 @@
-// src/components/features/Comments.js
+/*
+ * Assignment create by Group 2
+ */
 import { useState, useContext } from "react";
 import { Card, Col, Row, Form, Button, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";

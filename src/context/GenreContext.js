@@ -1,3 +1,6 @@
+/*
+ * Assignment create by Group 2
+ */
 import { createContext, useState } from "react";
 const GenreContext = createContext();
 

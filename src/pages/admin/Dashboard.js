@@ -1,4 +1,6 @@
-// src/pages/dashboard/Dashboard.js
+/*
+ * Assignment create by Group 2
+ */
 import { useState, useEffect, useContext } from "react";
 import {
   Container,

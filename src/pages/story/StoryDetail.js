@@ -1,4 +1,6 @@
-// src/pages/story/StoryDetail.js
+/*
+ * Assignment create by Group 2
+ */
 import { useState, useEffect, useContext } from "react";
 import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";

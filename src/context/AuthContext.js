@@ -1,4 +1,6 @@
-// src/context/AuthContext.js
+/*
+ * Assignment create by Group 2
+ */
 import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();

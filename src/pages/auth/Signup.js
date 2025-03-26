@@ -1,4 +1,6 @@
-// src/pages/auth/Signup.js
+/*
+ * Assignment create by Group 2
+ */
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {

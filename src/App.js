@@ -1,3 +1,6 @@
+/*
+ * Assignment create by Group 2
+ */
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import Footer from "./components/Footer";
